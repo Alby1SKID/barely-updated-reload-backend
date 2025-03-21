@@ -1,5 +1,11 @@
 {
-    "//": "BR Item Shop Config",
+    "//": "Put this before the id of the skin you wish to put in the shop which you can find on fortnite.gg/cosmetics",
+    "//": "AthenaDance", 
+    "//": "AthenaCharacter:",  
+    "//": "AthenaPickaxe:",  
+    "//": "AthenaGlider:",  
+    "//": "AthenaBackpack:",  
+    
     "daily1": {
         "itemGrants": [""],
         "price": 0
@@ -33,3 +39,4 @@
         "price": 0
     }
 }
+
