@@ -3,31 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Exists</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <title>Account Exists | Reload</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap">
     <link rel="icon" href="/Images/reload.ico" type="image/x-icon">
+    <style>
+        :root {
+            --primary: #00f0ff;
+            --primary-dark: #0077ff;
+            --bg-dark: #0a0a12;
+            --bg-darker: #050508;
+            --bg-light: #f5f5ff;
+            --text-light: #e0e0ff;
+            --text-dark: #111122;
+            --card-dark: rgba(20, 20, 40, 0.8);
+            --card-light: rgba(240, 240, 255, 0.9);
+            --success: #00ff88;
+            --error: #ff3366;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary-dark) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: pulse 15s infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+            100% { transform: translate(-10%, -10%); }
+        }
+
+        .account-container {
+            background: var(--card-dark);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .account-container::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            z-index: -1;
+            border-radius: 18px;
+            animation: borderRotate 6s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+
+        p {
+            color: rgba(200, 200, 255, 0.8);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        strong {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: var(--bg-darker);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: rgba(200, 200, 255, 0.5);
+            background: linear-gradient(to top, rgba(10, 10, 20, 0.8), transparent);
+        }
+
+        /* Light theme do NOT touch unless you know what your doing. */
+        body.light-theme {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        body.light-theme::before {
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0.05;
+        }
+
+        body.light-theme .account-container {
+            background: var(--card-light);
+            color: var(--text-dark);
+        }
+
+        body.light-theme p {
+            color: rgba(0, 0, 50, 0.7);
+        }
+
+        body.light-theme strong {
+            color: var(--primary-dark);
+        }
+
+        body.light-theme .btn-secondary {
+            color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        body.light-theme footer {
+            color: rgba(0, 0, 50, 0.5);
+            background: linear-gradient(to top, rgba(240, 240, 255, 0.8), transparent);
+        }
+
+    
+        @media (max-width: 480px) {
+            .account-container {
+                padding: 30px 20px;
+                margin: 0 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="dark-theme">
-    <div class="container">
-        <h1>Account Exists</h1>
-        <p>The Discord user <strong id="username"></strong> already has an account.</p>
+    <div class="account-container">
+        <h1>ACCOUNT EXISTS</h1>
+        <p>The Discord user <strong id="username"></strong> already has an account registered with us.</p>
+        
+        <div class="action-buttons">
+        </div>
     </div>
 
-    <button class="theme-toggle" id="themeToggle"></button>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
 
-    <footer style="position: fixed; bottom: 0; width: 100%; text-align: center; color: black; font-size: 14px; padding: 10px;">
-        Powered by Reload Backend - © 2025
+    <footer>
+        Powered by Reload Backend | ©2025 | v2
     </footer>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const username = params.get('username');
-        document.getElementById('username').textContent = username ? username : 'Unknown User';
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const username = params.get('username');
+            document.getElementById('username').textContent = username ? username : 'Unknown User';
 
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            document.body.classList.toggle('dark-theme');
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('light-theme');
+                document.body.classList.toggle('dark-theme');
+                
+                const icon = themeToggle.querySelector('i');
+                if (document.body.classList.contains('light-theme')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
         });
     </script>
 </body>
