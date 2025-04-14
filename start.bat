@@ -1,5 +1,5 @@
 @echo off
-title Kinda Updated Reload Backend
+title Barley Updated Reload Backend
 
 :start
 node index.js
